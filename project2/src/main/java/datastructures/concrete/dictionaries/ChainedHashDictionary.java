@@ -2,6 +2,7 @@ package datastructures.concrete.dictionaries;
 
 import datastructures.concrete.KVPair;
 import datastructures.interfaces.IDictionary;
+import misc.exceptions.NoSuchKeyException;
 import misc.exceptions.NotYetImplementedException;
 
 import java.util.Iterator;
@@ -12,12 +13,18 @@ import java.util.Iterator;
 public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
     // You may not change or rename this field: we will be inspecting
     // it using our private tests.
+    private static final int INITIAL_CAPACITY = 16;
+    
     private IDictionary<K, V>[] chains;
-
+    private float threshold;
+    private int size;
+    
     // You're encouraged to add extra fields (and helper methods) though!
 
     public ChainedHashDictionary() {
-        throw new NotYetImplementedException();
+        chains = makeArrayOfChains(INITIAL_CAPACITY);
+        threshold = 0.75f;
+        size = 0;
     }
 
     /**
@@ -36,27 +43,59 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public V get(K key) {
-        throw new NotYetImplementedException();
+        int index = getIndex(key);
+        if (chains[index] == null) {
+            throw new NoSuchKeyException();
+        }
+        return chains[index],get(key);
     }
 
     @Override
     public void put(K key, V value) {
-        throw new NotYetImplementedException();
+        size++;
+        if (getLoadFactor() > threshold) {
+            // resize array, rehash, reput
+        }
+        int index = getIndex(key);
+        if (chains[index] == null) {
+            chains[index] = new ArrayDictionary<K, V>();
+        } else {
+            chains[index].put(key, value);
+        }
+    }
+    
+    private float getLoadFactor() {
+        return (float) size / chains.length;
     }
 
     @Override
     public V remove(K key) {
-        throw new NotYetImplementedException();
+        int index = getIndex(key);
+        if (chains[index] == null) {
+            throw new NoSuchKeyException();
+        }
+        size--;
+        return chains[index)],remove(key);
     }
 
     @Override
     public boolean containsKey(K key) {
-        throw new NotYetImplementedException();
+        int index = getIndex(key);
+        if (chains[index] == null) {
+            return false;
+        }
+        return chains[index],containsKey(key);
     }
-
+    
+    private int getIndex(K key) {
+        int hash = key != null ? key.hashCode() : 0;
+        hash = (hash << 5) - hash;
+        return hash % size;
+    }
+    
     @Override
     public int size() {
-        throw new NotYetImplementedException();
+        return size;
     }
 
     @Override

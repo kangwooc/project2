@@ -3,7 +3,6 @@ package datastructures.concrete.dictionaries;
 import datastructures.concrete.KVPair;
 import datastructures.interfaces.IDictionary;
 import misc.exceptions.NoSuchKeyException;
-import misc.exceptions.NotYetImplementedException;
 
 import java.util.Iterator;
 
@@ -13,13 +12,13 @@ import java.util.Iterator;
  */
 public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 	private Pair<K, V>[] pairs;
-
     // You're encouraged to add extra fields (and helper methods) though!
-
+    private static final int INITIAL_CAPACITY = 3;
+    
     private int size;
 
     public ArrayDictionary() {
-        pairs = makeArrayOfPairs(10);
+        pairs = makeArrayOfPairs(INITIAL_CAPACITY);
         size = 0;
     }
 
@@ -122,7 +121,29 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public Iterator<KVPair<K, V>> iterator() {
-        throw new NotYetImplementedException();
+        // TODO: Code Here
+        return new ArrayDictionaryIterator<>();
+    }
+    
+    private static class ArrayDictionaryIterator<KVPair<K, V>> implements Iterator<KVPair<K, V>> {
+        private int currentIndex;
+        
+        public ArrayDictionaryIterator() {
+            currentIndex = 0;
+        }
+        
+        @Override
+        public boolean hasNext() {
+            return currentIndex < size;
+        }
+        
+        @Override
+        public KVPair<K,V> next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            return pairs[currentIndex++];
+        }
     }
 
     private static class Pair<K, V> {
