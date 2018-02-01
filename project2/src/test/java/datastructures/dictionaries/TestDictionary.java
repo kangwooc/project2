@@ -346,7 +346,7 @@ public abstract class TestDictionary extends BaseTest {
             String key = pair.getKey();
             int actualValue = pair.getValue();
             int expectedValue = copy.get(key);
-
+            
             assertEquals(expectedValue, actualValue);
             copy.remove(key);
         }

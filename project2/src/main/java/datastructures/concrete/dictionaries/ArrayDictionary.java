@@ -66,7 +66,7 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
     }
 
     private Pair<K, V>[] doubleArrayCapacity() {
-        Pair<K, V>[] result = makeArrayOfPairs(2 * pairs.length);
+        Pair<K, V>[] result = makeArrayOfPairs(pairs.length * 2);
         for (int i = 0; i < size; i++) {
             result[i] = pairs[i];
         }
@@ -142,7 +142,7 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            return new KVPair<K, V>(pairs[index++].key, pairs[index++].value);
+            return new KVPair<K, V>(pairs[index].key, pairs[index++].value);
         }
     }
 
